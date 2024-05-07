@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+    - .:/var/www/html
+    working_dir: /var/www/html
+    networks:
+    - score-app-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+    - "8000:80"
+    volumes:
+    - .:/var/www/html
+    - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    - ./var/log/nginx:/var/log/nginx
+    depends_on:
+    - php
+    networks:
+    - score-app-network
+
+  mysql:
+    image: mysql:latest
+    volumes:
+    - mysql-data:/var/lib/mysql
+    networks:
+    - score-app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+
+volumes:
+  mysql-data:
+
+networks:
+  score-app-network:
+    driver: bridge

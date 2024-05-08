@@ -13,5 +13,6 @@ RUN apt update && apt install -y --no-install-recommends \
     unzip  \
     git \
     && docker-php-ext-install zip \
+    && docker-php-ext-install pdo pdo_mysql \
     && rm -rf /var/lib/apt/lists/*
 

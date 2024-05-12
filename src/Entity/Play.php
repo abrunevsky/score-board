@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * @ORM\Entity(repositoryClass=PlayRepository::class)
- * @Table(uniqueConstraints={@UniqueConstraint(name="play_unq", columns={"tournament_id", "host_id", "guest_id"})})
+ * @Table(uniqueConstraints={@UniqueConstraint(name="play_unq", columns={"championship_id", "host_id", "guest_id"})})
  */
 class Play
 {
@@ -23,10 +23,10 @@ class Play
     private ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="plays")
+     * @ORM\ManyToOne(targetEntity=Championship::class, inversedBy="plays")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Tournament $tournament;
+    private Championship $championship;
 
     /**
      * @ORM\ManyToOne(targetEntity=Team::class)
@@ -55,9 +55,9 @@ class Play
      */
     private int $orderNumber;
 
-    public function __construct(Tournament $tournament, Team $host, Team $guest, int $orderNumber)
+    public function __construct(Championship $championship, Team $host, Team $guest, int $orderNumber)
     {
-        $this->tournament = $tournament;
+        $this->championship = $championship;
         $this->host = $host;
         $this->guest = $guest;
         $this->orderNumber = $orderNumber;
@@ -68,9 +68,9 @@ class Play
         return $this->id;
     }
 
-    public function getTournament(): ?Tournament
+    public function getChampionship(): ?Championship
     {
-        return $this->tournament;
+        return $this->championship;
     }
 
     public function getHost(): ?Team

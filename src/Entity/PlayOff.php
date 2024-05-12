@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * @ORM\Entity(repositoryClass=PlayOffRepository::class)
- * @Table(uniqueConstraints={@UniqueConstraint(name="play_unq", columns={"tournament_id", "team1_id", "team2_id"})})
+ * @Table(uniqueConstraints={@UniqueConstraint(name="play_unq", columns={"championship_id", "team1_id", "team2_id"})})
  */
 class PlayOff
 {
@@ -27,10 +27,10 @@ class PlayOff
     private ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tournament::class, inversedBy="playOffs")
+     * @ORM\ManyToOne(targetEntity=Championship::class, inversedBy="playOffs")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Tournament $tournament;
+    private Championship $championship;
 
     /**
      * @ORM\ManyToOne(targetEntity=Team::class)
@@ -59,9 +59,9 @@ class PlayOff
      */
     private int $stage;
 
-    public function __construct(Tournament $tournament, Team $team1, Team $team2, int $stage)
+    public function __construct(Championship $championship, Team $team1, Team $team2, int $stage)
     {
-        $this->tournament = $tournament;
+        $this->championship = $championship;
         $this->team1 = $team1;
         $this->team2 = $team2;
         $this->stage = $stage;
@@ -72,9 +72,9 @@ class PlayOff
         return $this->id;
     }
 
-    public function getTournament(): ?Tournament
+    public function getChampionship(): ?Championship
     {
-        return $this->tournament;
+        return $this->championship;
     }
 
     public function getTeam1(): ?Team

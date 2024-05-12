@@ -6,11 +6,11 @@ namespace App\Service;
 
 use App\Entity\Play;
 use App\Entity\PlayingTeam;
-use App\Entity\Tournament;
+use App\Entity\Championship;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class TournamentFactory
+class ChampionshipFactory
 {
     private const AVAILABLE_DIVISIONS = [
         PlayingTeam::DIVISION_A,
@@ -28,27 +28,27 @@ class TournamentFactory
         $this->entityManager = $entityManager;
     }
 
-    public function create(bool $bidirectional): Tournament
+    public function create(bool $bidirectional): Championship
     {
         return $this->entityManager->wrapInTransaction(function () use ($bidirectional) {
-            $tournament = new Tournament($bidirectional);
-            $this->entityManager->persist($tournament);
+            $championship = new Championship($bidirectional);
+            $this->entityManager->persist($championship);
 
-            $players = $this->prepareTeams($tournament);
+            $players = $this->prepareTeams($championship);
 
-            $this->preparePlays($tournament, $players);
+            $this->preparePlays($championship, $players);
 
-            $tournament->setStatus(Tournament::STATUS_DIVISION);
+            $championship->setStatus(Championship::STATUS_DIVISION);
             $this->entityManager->flush();
 
-            return $tournament;
+            return $championship;
         });
     }
 
     /**
      * @return PlayingTeam[]
      */
-    private function prepareTeams(Tournament $tournament): array
+    private function prepareTeams(Championship $championship): array
     {
         $players = [];
 
@@ -58,7 +58,7 @@ class TournamentFactory
             $divisionCode = $this->resolveTeamDivision();
             ++$divisionCounters[$divisionCode];
             $playingTeam = new PlayingTeam(
-                $tournament,
+                $championship,
                 $team,
                 $divisionCode,
                 $divisionCounters[$divisionCode]
@@ -78,7 +78,7 @@ class TournamentFactory
     /**
      * @param PlayingTeam[] $players
      */
-    private function preparePlays(Tournament $tournament, array $players): void
+    private function preparePlays(Championship $championship, array $players): void
     {
         $orderList = array_keys(array_fill(0, count($players), 0));
 
@@ -99,7 +99,7 @@ class TournamentFactory
                 }
 
                 $play = new Play(
-                    $tournament,
+                    $championship,
                     $player1->getTeam(),
                     $player2->getTeam(),
                     $this->resolvePlayingOrder($orderList)
@@ -107,9 +107,9 @@ class TournamentFactory
 
                 $this->entityManager->persist($play);
 
-                if ($tournament->isBidirectional()) {
+                if ($championship->isBidirectional()) {
                     $guestPlay = new Play(
-                        $tournament,
+                        $championship,
                         $player2->getTeam(),
                         $player1->getTeam(),
                         $this->resolvePlayingOrder($orderList)

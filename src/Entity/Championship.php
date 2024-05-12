@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\TournamentRepository;
+use App\Repository\ChampionshipRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=TournamentRepository::class)
+ * @ORM\Entity(repositoryClass=ChampionshipRepository::class)
  */
-final class Tournament
+final class Championship
 {
     public const STATUS_DRAW = 0;
     public const STATUS_DIVISION = 25;
@@ -40,21 +40,21 @@ final class Tournament
     private int $status = self::STATUS_DRAW;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlayingTeam::class, mappedBy="tournament", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=PlayingTeam::class, mappedBy="championship", orphanRemoval=true, fetch="EAGER")
      *
      * @var Collection<int, PlayingTeam>
      */
     private Collection $playingTeams;
 
     /**
-     * @ORM\OneToMany(targetEntity=Play::class, mappedBy="tournament", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=Play::class, mappedBy="championship", orphanRemoval=true, fetch="EAGER")
      *
      * @var Collection<int, Play>
      */
     private Collection $plays;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlayOff::class, mappedBy="tournament", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=PlayOff::class, mappedBy="championship", orphanRemoval=true, fetch="EAGER")
      *
      * @var Collection<int, PlayOff>
      */

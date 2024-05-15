@@ -43,25 +43,36 @@ table td {
     display: none;
 }
 
-.division-template {
+.board .box {
     margin: 2em auto;
-    align-items: center;
+    text-align: center;
 }
 
-.division-template .box {
+.board .box {
     display: inline-block;
+    vertical-align: top;
+    margin: 1rem;
 }
 
-.division-template table,
-.division-template table th,
-.division-template table td {
+.board table,
+.board table th,
+.board table td {
     border: 1px solid #777;
     text-align: center;
 }
-.division-template .empty-cell {
+.board table td:not(.team-title) {
+    width: 1rem;
+}
+
+.board table td.team-title {
+    text-align: left;
+}
+
+.board .empty-cell {
     background-color: #aaa;
 }
 .empty-board {
     text-align: center;
     color: #aa5555;
 }
+

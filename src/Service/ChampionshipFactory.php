@@ -12,20 +12,21 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ChampionshipFactory
 {
-    private const AVAILABLE_DIVISIONS = [
-        PlayingTeam::DIVISION_A,
-        PlayingTeam::DIVISION_B,
-    ];
-
     private TeamRepository $teamRepository;
     private EntityManagerInterface $entityManager;
+    private TeamDivisionResolver $divisionResolver;
+    private PlayingTimeResolver $playingTimeResolver;
 
     public function __construct(
         TeamRepository $teamRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        TeamDivisionResolver $divisionResolver,
+        PlayingTimeResolver $playingPositionResolver
     ) {
         $this->teamRepository = $teamRepository;
         $this->entityManager = $entityManager;
+        $this->divisionResolver = $divisionResolver;
+        $this->playingTimeResolver = $playingPositionResolver;
     }
 
     public function create(bool $bidirectional): Championship
@@ -35,10 +36,9 @@ class ChampionshipFactory
             $this->entityManager->persist($championship);
 
             $players = $this->prepareTeams($championship);
-
             $this->preparePlays($championship, $players);
+            $championship->setStatus(Championship::STATUS_PLAY);
 
-            $championship->setStatus(Championship::STATUS_DIVISION);
             $this->entityManager->flush();
 
             return $championship;
@@ -52,27 +52,15 @@ class ChampionshipFactory
     {
         $players = [];
 
-        $teams = $this->teamRepository->findAll();
-        $divisionCounters = array_fill_keys(self::AVAILABLE_DIVISIONS, 0);
+        $teams = $this->teamRepository->findAllSorted();
         foreach ($teams as $team) {
-            $divisionCode = $this->resolveTeamDivision();
-            ++$divisionCounters[$divisionCode];
-            $playingTeam = new PlayingTeam(
-                $championship,
-                $team,
-                $divisionCode,
-                $divisionCounters[$divisionCode]
-            );
-            $this->entityManager->persist($playingTeam);
+            $divisionCode = $this->divisionResolver->resolveDivision($team);
+            $playingTeam = new PlayingTeam($championship, $team, $divisionCode);
+            $championship->getPlayingTeams()->add($playingTeam);
             $players[] = $playingTeam;
         }
 
         return $players;
-    }
-
-    private function resolveTeamDivision(): string
-    {
-        return self::AVAILABLE_DIVISIONS[random_int(0, 1)];
     }
 
     /**
@@ -80,8 +68,6 @@ class ChampionshipFactory
      */
     private function preparePlays(Championship $championship, array $players): void
     {
-        $orderList = array_keys(array_fill(0, count($players), 0));
-
         foreach ($players as $player1) {
             $skip = true;
             foreach ($players as $player2) {
@@ -102,31 +88,20 @@ class ChampionshipFactory
                     $championship,
                     $player1->getTeam(),
                     $player2->getTeam(),
-                    $this->resolvePlayingOrder($orderList)
+                    $this->playingTimeResolver->resolvePlayingTime($player1->getTeam())
                 );
-
-                $this->entityManager->persist($play);
+                $championship->getPlays()->add($play);
 
                 if ($championship->isBidirectional()) {
                     $guestPlay = new Play(
                         $championship,
                         $player2->getTeam(),
                         $player1->getTeam(),
-                        $this->resolvePlayingOrder($orderList)
+                        $this->playingTimeResolver->resolvePlayingTime($player2->getTeam())
                     );
-                    $this->entityManager->persist($guestPlay);
+                    $championship->getPlays()->add($guestPlay);
                 }
             }
         }
-    }
-
-    /**
-     * @param array<int, int> $orderList
-     */
-    private function resolvePlayingOrder(array $orderList): int
-    {
-        $k = array_rand($orderList);
-
-        return (int) array_splice($orderList, $k, 1);
     }
 }

@@ -13,20 +13,15 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Entity(repositoryClass=PlayRepository::class)
  * @Table(uniqueConstraints={@UniqueConstraint(name="play_unq", columns={"championship_id", "host_id", "guest_id"})})
  */
-class Play
+final class Play extends AbstractPlay
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Championship::class, inversedBy="plays")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private Championship $championship;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Team::class)
@@ -50,27 +45,16 @@ class Play
      */
     private int $guestScore = 0;
 
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private int $orderNumber;
-
-    public function __construct(Championship $championship, Team $host, Team $guest, int $orderNumber)
+    public function __construct(Championship $championship, Team $host, Team $guest, \DateTimeImmutable $playAt)
     {
-        $this->championship = $championship;
+        parent::__construct($championship, $playAt);
         $this->host = $host;
         $this->guest = $guest;
-        $this->orderNumber = $orderNumber;
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getChampionship(): ?Championship
-    {
-        return $this->championship;
     }
 
     public function getHost(): ?Team
@@ -88,23 +72,15 @@ class Play
         return $this->hostScore;
     }
 
-    public function setHostScore(int $hostScore): void
-    {
-        $this->hostScore = $hostScore;
-    }
-
     public function getGuestScore(): ?int
     {
         return $this->guestScore;
     }
 
-    public function setGuestScore(int $guestScore): void
+    public function setCompleted(int $hostScore, int $guestScore): void
     {
+        $this->hostScore = $hostScore;
         $this->guestScore = $guestScore;
-    }
-
-    public function getOrderNumber(): int
-    {
-        return $this->orderNumber;
+        $this->status = self::STATUS_COMPLETED;
     }
 }

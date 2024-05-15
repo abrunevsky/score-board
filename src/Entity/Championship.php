@@ -14,11 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 final class Championship
 {
-    public const STATUS_DRAW = 0;
-    public const STATUS_DIVISION = 25;
-    public const STATUS_QUALIFYING = 50;
-    public const STATUS_PLAYOFF = 75;
-    public const STATUS_OVER = 100;
+    public const STATUS_DRAW = 'draw';
+    public const STATUS_PLAY = 'play';
+    public const STATUS_QUALIFYING = 'qualifying';
+    public const STATUS_PLAYOFF = 'playoff';
+    public const STATUS_FINISHED = 'finished';
 
     /**
      * @ORM\Id
@@ -32,29 +32,29 @@ final class Championship
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private \DateTimeImmutable $created_at;
+    private \DateTimeImmutable $createdAt;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="string", columnDefinition="ENUM('draw', 'play', 'qualifying', 'playoff', 'finished')")
      */
-    private int $status = self::STATUS_DRAW;
+    private string $status = self::STATUS_DRAW;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlayingTeam::class, mappedBy="championship", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=PlayingTeam::class, mappedBy="championship", orphanRemoval=true)
      *
      * @var Collection<int, PlayingTeam>
      */
     private Collection $playingTeams;
 
     /**
-     * @ORM\OneToMany(targetEntity=Play::class, mappedBy="championship", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=Play::class, mappedBy="championship", orphanRemoval=true)
      *
      * @var Collection<int, Play>
      */
     private Collection $plays;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlayOff::class, mappedBy="championship", orphanRemoval=true, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=PlayOff::class, mappedBy="championship", orphanRemoval=true)
      *
      * @var Collection<int, PlayOff>
      */
@@ -67,7 +67,7 @@ final class Championship
 
     public function __construct(bool $bidirectional)
     {
-        $this->created_at = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
         $this->playingTeams = new ArrayCollection();
         $this->plays = new ArrayCollection();
         $this->playOffs = new ArrayCollection();
@@ -81,15 +81,15 @@ final class Championship
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function getStatus(): int
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): void
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }

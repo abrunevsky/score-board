@@ -13,11 +13,8 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Entity(repositoryClass=PlayingTeamRepository::class)
  * @Table(uniqueConstraints={@UniqueConstraint(name="division_unq", columns={"championship_id", "team_id", "division"})})
  */
-class PlayingTeam
+final class PlayingTeam
 {
-    public const DIVISION_A = 'A';
-    public const DIVISION_B = 'B';
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -47,22 +44,11 @@ class PlayingTeam
      */
     private int $score = 0;
 
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private int $position;
-
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private int $totalPosition = 0;
-
-    public function __construct(Championship $championship, Team $team, string $division, int $position)
+    public function __construct(Championship $championship, Team $team, string $division)
     {
         $this->championship = $championship;
         $this->team = $team;
         $this->division = $division;
-        $this->position = $position;
     }
 
     public function getId(): ?int
@@ -70,14 +56,14 @@ class PlayingTeam
         return $this->id;
     }
 
+    public function getChampionship(): Championship
+    {
+        return $this->championship;
+    }
+
     public function getTeam(): ?Team
     {
         return $this->team;
-    }
-
-    public function getChampionship(): ?Championship
-    {
-        return $this->championship;
     }
 
     public function getDivision(): ?string
@@ -90,28 +76,8 @@ class PlayingTeam
         return $this->score;
     }
 
-    public function setScore(int $score): void
+    public function incrementScore(int $score): void
     {
-        $this->score = $score;
-    }
-
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
-    public function setPosition(int $position): void
-    {
-        $this->position = $position;
-    }
-
-    public function getTotalPosition(): int
-    {
-        return $this->totalPosition;
-    }
-
-    public function setTotalPosition(int $totalPosition): void
-    {
-        $this->totalPosition = $totalPosition;
+        $this->score += $score;
     }
 }

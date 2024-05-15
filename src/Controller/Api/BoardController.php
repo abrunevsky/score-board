@@ -40,7 +40,7 @@ class BoardController extends AbstractController
         $championship = $this->championshipRepository->findCurrent();
 
         return $this->json([
-            'teams' => $this->teamFormatter->format($teams),
+            'teams' => $this->teamFormatter->formatArray($teams),
             'championship' => $championship
                 ? $this->championshipFormatter->format($championship)
                 : null,

@@ -23,6 +23,9 @@ class TeamRepository extends ServiceEntityRepository
         parent::__construct($registry, Team::class);
     }
 
+    /**
+     * @return array<int, Team>
+     */
     public function findAllSorted(): array
     {
         return $this->createQueryBuilder('t')

@@ -48,6 +48,6 @@ abstract class AbstractPlay
 
     public function isCompleted(): bool
     {
-        return $this->status === self::STATUS_COMPLETED;
+        return self::STATUS_COMPLETED === $this->status;
     }
 }

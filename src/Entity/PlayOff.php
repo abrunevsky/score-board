@@ -97,7 +97,7 @@ final class PlayOff extends AbstractPlay
         return $this->stage;
     }
 
-    public function setCompleted(int $team1Score, int $team2Score): string
+    public function setCompleted(int $team1Score, int $team2Score): void
     {
         $this->team1Score = $team1Score;
         $this->team2Score = $team2Score;

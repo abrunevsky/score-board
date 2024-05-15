@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  */
 final class Play extends AbstractPlay
 {
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

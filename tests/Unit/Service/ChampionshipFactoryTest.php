@@ -63,7 +63,6 @@ class ChampionshipFactoryTest extends TestCase
             $divisionResolverMock,
             $timeResolverMock,
         );
-
     }
 
     public function testCreateChampionshipWillReturnSuccess(): void

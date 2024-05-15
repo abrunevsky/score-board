@@ -11,23 +11,22 @@ class BoardTeamFormatter
     /**
      * @param Team[] $teams
      *
-     * @return array<array>
+     * @return array<int, array<string, int|string>>
      */
-    public function format(array $teams): array
+    public function formatArray(array $teams): array
     {
         $formattedTeams = [];
         foreach ($teams as $k => $team) {
-            $formattedTeams[$k] = $this->formatItem($team);
+            $formattedTeams[$k] = $this->format($team);
         }
+
         return $formattedTeams;
     }
 
     /**
-     * @param Team $team
-     *
-     * @return array<string, mixed>
+     * @return array<string, int|string>
      */
-    public function formatItem(Team $team): array
+    public function format(Team $team): array
     {
         return [
             'id' => $team->getId(),

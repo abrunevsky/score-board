@@ -11,6 +11,9 @@ use App\Entity\PlayOff;
 
 class BoardChampionshipFormatter
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function format(Championship $championship): array
     {
         return [
@@ -28,6 +31,8 @@ class BoardChampionshipFormatter
     /**
      * @param PlayingTeam[] $playingTeams
      * @param Play[]        $plays
+     *
+     * @return array<string, array<int, array<int, array{int, int}|null>>>
      *
      * @todo: Implement rows/column sorting depending on teams total score
      */
@@ -74,6 +79,8 @@ class BoardChampionshipFormatter
 
     /**
      * @param PlayOff[] $getPlayOffs
+     *
+     * @return array<string, mixed>
      *
      * @todo: implement fetching data from repository and format them
      */

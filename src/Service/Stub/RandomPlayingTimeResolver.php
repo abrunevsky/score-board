@@ -14,7 +14,7 @@ class RandomPlayingTimeResolver implements PlayingTimeResolver
         return (new \DateTimeImmutable())->modify(
             sprintf(
                 '+ %d days',
-                random_int(1, $team->getId() +  strlen($team->getName()))
+                random_int(1, $team->getId() + strlen($team->getName()))
             )
         );
     }

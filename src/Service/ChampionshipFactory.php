@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Championship;
 use App\Entity\Play;
 use App\Entity\PlayingTeam;
-use App\Entity\Championship;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 

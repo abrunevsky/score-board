@@ -1,13 +1,18 @@
 $(() => {
     const BOARD_API_ENDPOINT = '/api/board/current';
-    const CONTROL_API_ENTRYPOINT = '/api/championship';
+    const ADMIN_API_CREATE = '/api/championship';
+    const ADMIN_API_UPDATE = '/api/championship/current';
     let current = {};
 
-    $.ajaxSetup({ dataType: 'json'});
+    $.ajaxSetup({ dataType: 'json' });
+
+    const lockControls = (flag) => {
+        $('.control button').prop('disabled', flag);
+    };
 
     const loadBoard = () => {
         $('.loading').show();
-        $.getJSON(BOARD_API_ENDPOINT).then((data) => {
+        return $.getJSON(BOARD_API_ENDPOINT).then((data) => {
             $('.loading').hide();
             console.log('request to', BOARD_API_ENDPOINT, 'returned', data);
             setCurrent(data);
@@ -87,11 +92,24 @@ $(() => {
         })
     }
 
-    $('.create-btn').click(({ target }) => {
+    $('.create-btn').on('click', ({ target }) => {
         if (current.championship === null || window.confirm('Are you sure?')) {
             const bidirectional = Boolean($(target).data('bidirectional'));
-            $.post(CONTROL_API_ENTRYPOINT, { bidirectional }).then(() => {
+            $.ajax({ url: ADMIN_API_CREATE, method: 'POST', data: { bidirectional }}).then(() => {
+                lockControls(true);
                 location.reload();
+            });
+        }
+    });
+
+    $('.iterate-btn').on('click', ({ target }) => {
+        const finalize = Boolean($(target).data('finalize'));
+        if (!finalize || window.confirm('Are you sure?')) {
+            $.ajax({  url: ADMIN_API_UPDATE, method: 'PUT', data: { finalize }}).then(() => {
+                lockControls(true);
+                loadBoard().then(() => {
+                    lockControls(false);
+                });
             });
         }
     });

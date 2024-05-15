@@ -6,6 +6,20 @@ body {
     display: none;
 }
 
+#app {
+    position: relative;
+}
+
+.loading {
+    position: absolute;
+    right: 0;
+    z-index: 1000;
+    background-color: aliceblue;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #ccc;
+    font-style: italic;
+}
+
 .play-off {
     margin: 1rem auto;
     min-width: 400px;
@@ -75,4 +89,3 @@ table td {
     text-align: center;
     color: #aa5555;
 }
-

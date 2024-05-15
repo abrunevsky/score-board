@@ -1,0 +1,67 @@
+body {
+    font-family: Arial, serif;
+    font-size: 15px;
+}
+.hidden {
+    display: none;
+}
+
+.play-off {
+    margin: 1rem auto;
+    min-width: 400px;
+    max-width: 800px;
+}
+
+.play-off th {
+    width: 25%;
+}
+
+table,
+table th,
+table td {
+    padding: 3px 0.5rem;
+    border-collapse: collapse;
+}
+
+.table-border {
+    border: 1px none #777;
+}
+
+.border-bottom {
+    border-bottom-style: solid;
+}
+.border-left {
+    border-left-style: solid;
+}
+
+.control {
+    margin: 1em auto;
+    text-align: center;
+}
+
+.display-none {
+    display: none;
+}
+
+.division-template {
+    margin: 2em auto;
+    align-items: center;
+}
+
+.division-template .box {
+    display: inline-block;
+}
+
+.division-template table,
+.division-template table th,
+.division-template table td {
+    border: 1px solid #777;
+    text-align: center;
+}
+.division-template .empty-cell {
+    background-color: #aaa;
+}
+.empty-board {
+    text-align: center;
+    color: #aa5555;
+}

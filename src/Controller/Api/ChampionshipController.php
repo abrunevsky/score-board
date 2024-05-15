@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\Championship;
 use App\Repository\ChampionshipRepository;
@@ -31,7 +31,7 @@ class ChampionshipController extends AbstractController
     }
 
     /**
-     * @Route("/championship/current", name="championship_get", methods={"GET"})
+     * @Route("/api/championship/current", name="championship_get", methods={"GET"})
      */
     public function getCurrent(): JsonResponse
     {
@@ -46,7 +46,7 @@ class ChampionshipController extends AbstractController
     }
 
     /**
-     * @Route("/championship/current", name="championship_create", methods={"POST"})
+     * @Route("/api/championship", name="championship_create", methods={"POST"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -55,7 +55,7 @@ class ChampionshipController extends AbstractController
 
         if (
             $championship instanceof Championship
-            && Championship::STATUS_OVER !== $championship->getStatus()
+            && Championship::STATUS_FINISHED !== $championship->getStatus()
         ) {
             throw new ConflictHttpException('Current championship already exists and it has not been over yet.');
         }
@@ -69,7 +69,7 @@ class ChampionshipController extends AbstractController
     }
 
     /**
-     * @Route("/championship/current", name="championship_increment", methods={"PUT"})
+     * @Route("/api/championship/current", name="championship_increment", methods={"PUT"})
      */
     public function increment(Request $request): JsonResponse
     {
@@ -78,7 +78,7 @@ class ChampionshipController extends AbstractController
 
         if (
             null === $championship
-            || Championship::STATUS_OVER === $championship->getStatus()
+            || Championship::STATUS_FINISHED === $championship->getStatus()
         ) {
             throw new ConflictHttpException('Current championship does not exist or it is over.');
         }

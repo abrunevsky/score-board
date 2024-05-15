@@ -1,0 +1,155 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Score Board</title>
+	<link rel="stylesheet" href="assets/styles.css" />
+	<script src="https://www.unpkg.com/jquery@3.7.1/dist/jquery.min.js"></script>
+</head>
+<body>
+	<div id="app">
+		<div class="loading">Loading...</div>
+		<div class="empty-board hidden">
+			<h2>Board not found!</h2>
+		</div>
+		<div class="board hidden">
+			<div class="score-tables">
+				<div class="division-template">
+					<div class="box">
+						<table>
+							<thead>
+							<tr>
+								<th colspan="5">Division A</th>
+							</tr>
+							<tr>
+								<th>Teams</th>
+								<td>1</td>
+								<td>2</td>
+								<td>3</td>
+								<td>4</td>
+							</tr>
+							<tr>
+								<td>Team 1</td>
+								<td class="empty-cell">&nbsp;</td>
+								<td>1:1</td>
+								<td>2:3</td>
+								<td>3:0</td>
+							</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="play-off">
+				<table>
+					<thead>
+					<tr>
+						<th class="table-border border-bottom" colspan="2">Quarter-final</th>
+						<th class="table-border border-bottom" colspan="2">Semi-final</th>
+						<th class="table-border border-bottom" colspan="2">Final</th>
+						<th class="table-border border-bottom border-left">Result</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="table-border border-bottom">Team 1 (A)</td>
+						<td rowspan="2">1:0</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td class="table-border border-left" rowspan="14">
+							<div>
+								<table>
+									<tbody>
+									<tr>
+										<td>1</td>
+										<td>Team 1</td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td>Team 2</td>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td>Team 3</td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td>Team 4</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>Team 4 (B)</td>
+					</tr>
+					<tr>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td class="table-border border-bottom">Team 1 (A)</td>
+						<td rowspan="2">0:1</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td>Team 3 (B)</td>
+					</tr>
+					<tr>
+						<td class="table-border border-bottom">Team 2 (A)</td>
+						<td rowspan="2">0:1</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td class="table-border border-bottom">1 Winner of semi-final</td>
+						<td rowspan="2">0:1</td>
+					</tr>
+					<tr>
+						<td>Team 3 (B)</td>
+						<td>2 Winner of semi-final</td>
+					</tr>
+					<tr>
+						<td colspan="6">&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="table-border border-bottom">Team 3 (A)</td>
+						<td rowspan="2">0:1</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td class="table-border border-bottom">Team 1 (A)</td>
+						<td rowspan="2">0:1</td>
+					</tr>
+					<tr>
+						<td>Team 2 (B)</td>
+						<td>Team 2 (B)</td>
+					</tr>
+					<tr>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td class="table-border border-bottom">Team 2 (B)</td>
+						<td rowspan="2">0:1</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td>Team 1 (B)</td>
+					</tr>
+					<tr>
+						<td class="table-border border-bottom">Team 4 (A)</td>
+						<td rowspan="2">1:0</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+						<td colspan="2" rowspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td>Team 1 (B)</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr />
+		<hr />
+		<div class="control hidden">
+			<h4>Championship control:</h4>
+			<button type="button" class="create-btn" data-bidirectional="0">Create New</button>
+			<button type="button" class="create-btn" data-bidirectional="1">Create New (host + guest)</button>
+			<button type="button" class="iterate-btn">Apply Iteration Step</button>
+			<button type="button" class="iterate-btn">Apply All Steps</button>
+		</div>
+	</div>
+	<script type="module" src="assets/main.js"></script>
+</body>
+</html>

@@ -80,7 +80,7 @@ class ChampionshipFactoryTest extends TestCase
 
         self::assertCount(5, $playingTeams);
 
-        $playingTeam3 = $playingTeams->get(2);
+        $playingTeam3 = $playingTeams[2];
         self::assertInstanceOf(PlayingTeam::class, $playingTeam3);
         self::assertSame($championship, $playingTeam3->getChampionship());
         self::assertSame('B', $playingTeam3->getDivision());
@@ -94,7 +94,7 @@ class ChampionshipFactoryTest extends TestCase
 
         self::assertCount(4, $plays);
 
-        $play3 = $plays->get(2);
+        $play3 = $plays[2];
         self::assertInstanceOf(Play::class, $play3);
 
         self::assertSame($championship, $play3->getChampionship());
@@ -113,7 +113,7 @@ class ChampionshipFactoryTest extends TestCase
         $plays = $championship->getPlays();
         self::assertCount(8, $plays);
 
-        $play7 = $plays->get(6);
+        $play7 = $plays[6];
         self::assertInstanceOf(Play::class, $play7);
         self::assertSame($championship, $play7->getChampionship());
         self::assertSame(false, $play7->isCompleted());

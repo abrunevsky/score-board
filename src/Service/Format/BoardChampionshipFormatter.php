@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service\Format;
 
 use App\Entity\Championship;
-use App\Entity\PlayingTeam;
 use App\Entity\PlayOff;
 
 class BoardChampionshipFormatter

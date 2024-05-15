@@ -10,7 +10,7 @@ use App\Service\ProgressHandler\ChampionshipHandlerInterface;
 class ChampionshipProcessor
 {
     /**
-     * @var non-empty-array<ChampionshipHandlerInterface>
+     * @var array<ChampionshipHandlerInterface>
      */
     private array $handlers;
 

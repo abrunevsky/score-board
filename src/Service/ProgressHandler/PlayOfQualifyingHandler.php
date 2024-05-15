@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Service\ProgressHandler;
 
 use App\Entity\Championship;
-use App\Entity\PlayingTeam;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PlayOfQualifyingHandler implements ChampionshipHandlerInterface
 {
-
     private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -20,7 +18,7 @@ class PlayOfQualifyingHandler implements ChampionshipHandlerInterface
 
     public function canProcess(Championship $championship): bool
     {
-        return $championship->getStatus() === Championship::STATUS_QUALIFYING;
+        return Championship::STATUS_QUALIFYING === $championship->getStatus();
     }
 
     public function process(Championship $championship): void

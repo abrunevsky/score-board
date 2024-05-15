@@ -99,11 +99,11 @@ final class Championship
      */
     public function getPlayingTeams(): array
     {
-        return $this->playingTeams;
+        return $this->playingTeams->toArray();
     }
 
     /**
-     * @param array<$playingTeams>
+     * @param array<int, PlayingTeam> $playingTeams
      */
     public function setPlayingTeams(array $playingTeams): void
     {
@@ -119,7 +119,7 @@ final class Championship
     }
 
     /**
-     * @param array<$plays>
+     * @param array<int, Play> $plays
      */
     public function setPlays(array $plays): void
     {
@@ -135,7 +135,7 @@ final class Championship
     }
 
     /**
-     * @param array<PlayOff> $playOffs
+     * @param array<int, PlayOff> $playOffs
      */
     public function setPlayOffs(array $playOffs): void
     {

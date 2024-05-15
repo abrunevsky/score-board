@@ -74,7 +74,6 @@ class ChampionshipController extends AbstractController
     public function increment(Request $request): JsonResponse
     {
         $championship = $this->championshipRepository->findCurrent();
-        $finalize = (bool) $request->request->get('finalize', false);
 
         if (
             null === $championship
@@ -83,7 +82,7 @@ class ChampionshipController extends AbstractController
             throw new ConflictHttpException('Current championship does not exist or it is over.');
         }
 
-        if ($finalize) {
+        if ($request->request->get('finalize', false)) {
             $this->championshipProcessor->processAllSTeps($championship);
         } else {
             $this->championshipProcessor->processStep($championship);

@@ -40,21 +40,21 @@ final class Championship
     private string $status = self::STATUS_DRAW;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlayingTeam::class, mappedBy="championship", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PlayingTeam::class, mappedBy="championship", orphanRemoval=true, cascade={"all"})
      *
      * @var Collection<int, PlayingTeam>
      */
     private Collection $playingTeams;
 
     /**
-     * @ORM\OneToMany(targetEntity=Play::class, mappedBy="championship", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Play::class, mappedBy="championship", orphanRemoval=true, cascade={"all"})
      *
      * @var Collection<int, Play>
      */
     private Collection $plays;
 
     /**
-     * @ORM\OneToMany(targetEntity=PlayOff::class, mappedBy="championship", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PlayOff::class, mappedBy="championship", orphanRemoval=true, cascade={"all"})
      *
      * @var Collection<int, PlayOff>
      */
@@ -95,31 +95,81 @@ final class Championship
     }
 
     /**
-     * @return Collection<int, PlayingTeam>
+     * @return array<int, PlayingTeam>
      */
-    public function getPlayingTeams(): Collection
+    public function getPlayingTeams(): array
     {
         return $this->playingTeams;
     }
 
     /**
-     * @return Collection<int, Play>
+     * @param array<$playingTeams>
      */
-    public function getPlays(): Collection
+    public function setPlayingTeams(array $playingTeams): void
     {
-        return $this->plays;
+        $this->playingTeams = new ArrayCollection($playingTeams);
     }
 
     /**
-     * @return Collection<int, PlayOff>
+     * @return array<int, Play>
      */
-    public function getPlayOffs(): Collection
+    public function getPlays(): array
     {
-        return $this->playOffs;
+        return $this->plays->toArray();
+    }
+
+    /**
+     * @param array<$plays>
+     */
+    public function setPlays(array $plays): void
+    {
+        $this->plays = new ArrayCollection($plays);
+    }
+
+    /**
+     * @return array<int, PlayOff>
+     */
+    public function getPlayOffs(): array
+    {
+        return $this->playOffs->toArray();
+    }
+
+    /**
+     * @param array<PlayOff> $playOffs
+     */
+    public function setPlayOffs(array $playOffs): void
+    {
+        $this->playOffs = new ArrayCollection($playOffs);
     }
 
     public function isBidirectional(): bool
     {
         return $this->bidirectional;
+    }
+
+    public function findPlayingTeamByTeam(Team $team): ?PlayingTeam
+    {
+        if (null === $team->getId()) {
+            return null;
+        }
+
+        $players = $this->playingTeams->filter(static function (PlayingTeam $playingTeam) use ($team) {
+            return $playingTeam->getTeam()->getId() === $team->getId();
+        });
+
+        return $players->getValues()[0] ?? null;
+    }
+
+    /**
+     * @return PlayingTeam[]
+     */
+    public function getSortedPlayingTeams(): array
+    {
+        $playingTeams = $this->playingTeams->toArray();
+        uasort($playingTeams, static function (PlayingTeam $player1, PlayingTeam $player2) {
+            return -1 * ($player1->getScore() <=> $player2->getScore());
+        });
+
+        return $playingTeams;
     }
 }

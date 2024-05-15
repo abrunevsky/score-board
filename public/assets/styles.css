@@ -20,16 +20,6 @@ body {
     font-style: italic;
 }
 
-.play-off {
-    margin: 1rem auto;
-    min-width: 400px;
-    max-width: 800px;
-}
-
-.play-off th {
-    width: 25%;
-}
-
 table,
 table th,
 table td {
@@ -57,35 +47,45 @@ table td {
     display: none;
 }
 
-.board .box {
+.score-tables .box {
     margin: 2em auto;
     text-align: center;
 }
 
-.board .box {
+.score-tables .box {
     display: inline-block;
     vertical-align: top;
     margin: 1rem;
 }
 
-.board table,
-.board table th,
-.board table td {
+.score-tables table,
+.score-tables table th,
+.score-tables table td {
     border: 1px solid #777;
     text-align: center;
 }
-.board table td:not(.team-title) {
+.score-tables table td:not(.team-title) {
     width: 1rem;
 }
 
-.board table td.team-title {
+.score-tables table td.team-title {
     text-align: left;
 }
 
-.board .empty-cell {
+.score-tables .empty-cell {
     background-color: #aaa;
 }
 .empty-board {
     text-align: center;
     color: #aa5555;
+}
+
+.play-off {
+    margin: 3rem auto;
+    min-width: 400px;
+    max-width: 1000px;
+}
+
+.play-off th {
+    width: 25%;
 }

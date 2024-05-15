@@ -14,7 +14,6 @@ $(() => {
         $('.loading').show();
         return $.getJSON(BOARD_API_ENDPOINT).then((data) => {
             $('.loading').hide();
-            console.log('request to', BOARD_API_ENDPOINT, 'returned', data);
             setCurrent(data);
         });
     };
@@ -33,18 +32,19 @@ $(() => {
         );
 
         const scoreHeaders = table.find('thead .teams-title');
-        Object.keys(scoreTable).forEach((hostId, index) => {
-            scoreHeaders.append(`<td>${index + 1}</td>`)
+        scoreTable.forEach((row, index) => {
+            scoreHeaders.append(`<th>${index + 1}</th>`)
         });
+        scoreHeaders.append('<th>Score</th>')
 
         const scoreBody = table.find('tbody')
-        Object.keys(scoreTable).forEach((hostId, rowIndex) => {
-            const row = $(`<tr><td class="team-title">${rowIndex + 1}. ${teamsDictionary[hostId]}</td></tr>`)
-            const hostScores = scoreTable[hostId];
-            Object.keys(scoreTable).forEach((guestId, calIndex) => {
+        scoreTable.forEach((hostRow, rowIndex) => {
+            const teamName = teamsDictionary[hostRow.teamId];
+            const row = $(`<tr><td class="team-title">${rowIndex + 1}. ${teamName}</td></tr>`)
+            scoreTable.forEach((guestRow) => {
                 let cell = $('<td/>');
-                if (guestId in hostScores) {
-                    const score = hostScores[guestId];
+                if (guestRow.teamId in hostRow.scores) {
+                    const score = hostRow.scores[guestRow.teamId];
                     if (score) {
                         cell.append(`${score[0]}:${score[1]}`);
                     }
@@ -53,10 +53,10 @@ $(() => {
                 }
                 row.append(cell)
             });
+            row.append(`<td>${hostRow.total}</td>`)
+
             scoreBody.append(row);
         });
-
-        console.log('--- > ', divisionName);
 
         return table;
     };
@@ -68,10 +68,15 @@ $(() => {
         if (championship === null) {
             $('.iterate-btn').hide();
             $('.empty-board, .create-btn').show();
+        } else if (championship.status === 'finished') {
+            $('.iterate-btn').hide();
+            $('.create-btn').show();
         } else {
             $('.iterate-btn').show();
             $('.empty-board, .create-btn').hide();
+        }
 
+        if (championship) {
             $('.board').removeClass('hidden');
 
             if (['playoff', 'finished'].indexOf(championship.status) >= 0) {
@@ -94,19 +99,21 @@ $(() => {
 
     $('.create-btn').on('click', ({ target }) => {
         if (current.championship === null || window.confirm('Are you sure?')) {
-            const bidirectional = Boolean($(target).data('bidirectional'));
+            const bidirectional = $(target).data('bidirectional');
+            $('.loading').show();
+            lockControls(true);
             $.ajax({ url: ADMIN_API_CREATE, method: 'POST', data: { bidirectional }}).then(() => {
-                lockControls(true);
                 location.reload();
             });
         }
     });
 
     $('.iterate-btn').on('click', ({ target }) => {
-        const finalize = Boolean($(target).data('finalize'));
-        if (!finalize || window.confirm('Are you sure?')) {
+        const finalize = $(target).data('finalize');
+        if (!Boolean(finalize) || window.confirm('Are you sure?')) {
+            $('.loading').show();
+            lockControls(true);
             $.ajax({  url: ADMIN_API_UPDATE, method: 'PUT', data: { finalize }}).then(() => {
-                lockControls(true);
                 loadBoard().then(() => {
                     lockControls(false);
                 });

@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class AbstractPlay
 {
-    protected const STATUS_PENDING = 'pending';
-    protected const STATUS_COMPLETED = 'completed';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_COMPLETED = 'completed';
 
     /**
      * @ORM\ManyToOne(targetEntity=Championship::class, inversedBy="plays")

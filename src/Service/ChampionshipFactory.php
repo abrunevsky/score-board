@@ -36,7 +36,10 @@ class ChampionshipFactory
             $this->entityManager->persist($championship);
 
             $players = $this->prepareTeams($championship);
-            $this->preparePlays($championship, $players);
+            $championship->setPlayingTeams($players);
+
+            $plays = $this->preparePlays($championship, $players);
+            $championship->setPlays($plays);
             $championship->setStatus(Championship::STATUS_PLAY);
 
             $this->entityManager->flush();
@@ -56,7 +59,6 @@ class ChampionshipFactory
         foreach ($teams as $team) {
             $divisionCode = $this->divisionResolver->resolveDivision($team);
             $playingTeam = new PlayingTeam($championship, $team, $divisionCode);
-            $championship->getPlayingTeams()->add($playingTeam);
             $players[] = $playingTeam;
         }
 
@@ -65,9 +67,13 @@ class ChampionshipFactory
 
     /**
      * @param PlayingTeam[] $players
+     *
+     * @return array<int, Play>
      */
-    private function preparePlays(Championship $championship, array $players): void
+    private function preparePlays(Championship $championship, array $players): array
     {
+        $plays = [];
+
         foreach ($players as $player1) {
             $skip = true;
             foreach ($players as $player2) {
@@ -84,24 +90,24 @@ class ChampionshipFactory
                     continue;
                 }
 
-                $play = new Play(
+                $plays[] = new Play(
                     $championship,
                     $player1->getTeam(),
                     $player2->getTeam(),
                     $this->playingTimeResolver->resolvePlayingTime($player1->getTeam())
                 );
-                $championship->getPlays()->add($play);
 
                 if ($championship->isBidirectional()) {
-                    $guestPlay = new Play(
+                    $plays[] = new Play(
                         $championship,
                         $player2->getTeam(),
                         $player1->getTeam(),
                         $this->playingTimeResolver->resolvePlayingTime($player2->getTeam())
                     );
-                    $championship->getPlays()->add($guestPlay);
                 }
             }
         }
+
+        return $plays;
     }
 }

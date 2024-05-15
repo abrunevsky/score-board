@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service\Format;
 
 use App\Entity\Championship;
-use App\Entity\Play;
 use App\Entity\PlayingTeam;
 use App\Entity\PlayOff;
 
@@ -19,25 +18,20 @@ class BoardChampionshipFormatter
         return [
             'id' => $championship->getId(),
             'status' => $championship->getStatus(),
-            'divisions' => $this->formatDivisions(
-                $championship->getPlayingTeams()->toArray(),
-                $championship->getPlays()->toArray(),
-                $championship->isBidirectional(),
-            ),
-            'playoff' => $this->formatPlayOff($championship->getPlayOffs()->toArray()),
+            'divisions' => $this->formatDivisions($championship),
+            'playoff' => $this->formatPlayOff($championship->getPlayOffs()),
         ];
     }
 
     /**
-     * @param PlayingTeam[] $playingTeams
-     * @param Play[]        $plays
-     *
-     * @return array<string, array<int, array<int, array{int, int}|null>>>
-     *
-     * @todo: Implement rows/column sorting depending on teams total score
+     * @return array<string, array<int, array<string, int|array<int, array{int, int}|null>>>>
      */
-    private function formatDivisions(array $playingTeams, array $plays, bool $isBidirectional): array
+    private function formatDivisions(Championship $championship): array
     {
+        $playingTeams = $championship->getSortedPlayingTeams();
+        $plays = $championship->getPlays();
+        $isBidirectional = $championship->isBidirectional();
+
         $teamPlays = [];
         foreach ($plays as $play) {
             $host = $play->getHost();
@@ -71,8 +65,14 @@ class BoardChampionshipFormatter
                 $divisions[$playingTeam->getDivision()] = [];
             }
 
-            $divisions[$playingTeam->getDivision()][$playingTeam->getTeam()->getId()] = $teamPlays[$playingTeam->getTeam()->getId()] ?? null;
+            $divisions[$playingTeam->getDivision()][] = [
+                'teamId' => $playingTeam->getTeam()->getId(),
+                'scores' => $teamPlays[$playingTeam->getTeam()->getId()] ?? null,
+                'total' => $playingTeam->getScore(),
+            ];
         }
+
+        ksort($divisions);
 
         return $divisions;
     }

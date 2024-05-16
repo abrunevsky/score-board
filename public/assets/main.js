@@ -4,7 +4,50 @@ $(() => {
     const ADMIN_API_UPDATE = '/api/championship/current';
     let current = {};
 
-    $.ajaxSetup({ dataType: 'json' });
+    $.ajaxSetup({
+        dataType: 'json',
+        error: (x, status, error) => {
+            alert(
+                `An error occurred: ${status}\nError: [${x.status}] ${error}\n\nReload the page and try again!`
+            );
+        },
+    });
+
+    const visibilityMap = {
+        '.board': (status) => status !== undefined,
+        '.control': true,
+        '.empty-board': [undefined],
+        '.create-btn': ['error', 'finished'],
+        '.iterate-btn': (status) => ['error', 'finished'].indexOf(status) === -1,
+        '.play-off': ['qualifying', 'finished'],
+    };
+
+    const toggleVisibility = (championship) => {
+        const toHide = [];
+        const toShow = [];
+
+        Object.keys(visibilityMap).forEach((selector) => {
+            const rule = visibilityMap[selector];
+            let show;
+            if (typeof rule === 'function') {
+                show = rule(championship?.status);
+            } else if (Array.isArray(rule)) {
+                show = rule.indexOf(championship.status) >= 0;
+            } else if (typeof rule == "boolean") {
+                show = rule;
+            } else {
+                show = rule === championship.status;
+            }
+            (show ? toShow : toHide).push(selector)
+        })
+
+        if (toHide.length) {
+            $(toHide.join(',')).addClass('hidden');
+        }
+        if (toShow.length) {
+            $(toShow.join(',')).removeClass('hidden');
+        }
+    }
 
     const lockControls = (flag) => {
         $('.control button').prop('disabled', flag);
@@ -65,26 +108,7 @@ $(() => {
         current = data;
         const { championship, teams } = data;
 
-        if (championship === null) {
-            $('.iterate-btn').hide();
-            $('.empty-board, .create-btn').show();
-        } else if (championship.status === 'finished') {
-            $('.iterate-btn').hide();
-            $('.create-btn').show();
-        } else {
-            $('.iterate-btn').show();
-            $('.empty-board, .create-btn').hide();
-        }
-
-        if (championship) {
-            $('.board').removeClass('hidden');
-
-            if (['playoff', 'finished'].indexOf(championship.status) >= 0) {
-                $('.play-off').removeClass('hidden');
-            }
-        }
-
-        $('.control').removeClass('hidden');
+        toggleVisibility(championship);
 
         const teamsDictionary = {};
         teams.forEach(({ id, name }) => teamsDictionary[id] = name);

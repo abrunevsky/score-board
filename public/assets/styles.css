@@ -1,6 +1,6 @@
-body {
+html {
     font-family: Arial, serif;
-    font-size: 15px;
+    font-size: 12px;
 }
 .hidden {
     display: none;
@@ -25,6 +25,7 @@ table th,
 table td {
     padding: 3px 0.5rem;
     border-collapse: collapse;
+    white-space: nowrap;
 }
 
 .table-border {
@@ -41,6 +42,7 @@ table td {
 .control {
     margin: 1em auto;
     text-align: center;
+    font-size: 16px;
 }
 
 .display-none {
@@ -82,8 +84,8 @@ table td {
 
 .play-off {
     margin: 3rem auto;
-    min-width: 400px;
-    max-width: 1000px;
+    min-width: 800px;
+    max-width: 1200px;
 }
 
 .play-off th {

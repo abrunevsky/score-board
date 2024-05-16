@@ -61,7 +61,7 @@ $(() => {
         });
     };
 
-    const createDivisionTable = (divisionName, scoreTable, teamsDictionary) => {
+    const createDivisionTable = (divisionName, scoreTable) => {
         const table = $(
             `<div class="box">
                 <table>
@@ -82,8 +82,7 @@ $(() => {
 
         const scoreBody = table.find('tbody')
         scoreTable.forEach((hostRow, rowIndex) => {
-            const teamName = teamsDictionary[hostRow.teamId];
-            const row = $(`<tr><td class="team-title">${rowIndex + 1}. ${teamName}</td></tr>`)
+            const row = $(`<tr><td class="team-title">${rowIndex + 1}. ${hostRow.teamName}</td></tr>`)
             scoreTable.forEach((guestRow) => {
                 let cell = $('<td/>');
                 if (guestRow.teamId in hostRow.scores) {
@@ -106,19 +105,29 @@ $(() => {
 
     const setCurrent = (data) => {
         current = data;
-        const { championship, teams } = data;
+        const { championship } = data;
+        const { divisions, playoff } = championship;
 
         toggleVisibility(championship);
 
-        const teamsDictionary = {};
-        teams.forEach(({ id, name }) => teamsDictionary[id] = name);
-
         const divisionsBox = $('.score-tables').html('');
-        Object.keys(championship.divisions).forEach((divisionName) => {
+        Object.keys(divisions).forEach((divisionName) => {
             divisionsBox.append(
-                createDivisionTable(divisionName, championship.divisions[divisionName], teamsDictionary)
+                createDivisionTable(divisionName, divisions[divisionName])
             );
         })
+
+        Object.keys(playoff).forEach((stage) => {
+            playoff[stage].forEach((game, gameIndex) => {
+                const { teams, score } = game;
+                teams.forEach((teamName, teamIndex) => {
+                    $(`#${stage}-name-${gameIndex}${teamIndex + 1}`).html(teamName);
+                });
+                if (score) {
+                    $(`#${stage}-score-${gameIndex}`).html(`${score[0]}:${score[1]}`);
+                }
+            });
+        });
     }
 
     $('.create-btn').on('click', ({ target }) => {

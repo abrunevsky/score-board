@@ -31,10 +31,7 @@ class PlayOfQualifyingHandler extends AbstractPlayOfHandler
         $playOffPlayers = [];
         $winnersByDivision = [];
         foreach ($championship->getSortedPlayingTeams() as $team) {
-            if (!array_key_exists($team->getDivision(), $winnersByDivision)) {
-                $winnersByDivision[$team->getDivision()] = [];
-            }
-
+            $winnersByDivision[$team->getDivision()] ??= [];
             if (count($winnersByDivision[$team->getDivision()]) < self::PLAYOFF_TEAMS_QTY) {
                 $winnersByDivision[$team->getDivision()][] = $team->getTeam();
             }

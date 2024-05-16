@@ -54,10 +54,10 @@ class ChampionshipFactory
     private function prepareTeams(Championship $championship): array
     {
         $players = [];
-
         $teams = $this->teamRepository->findAllSorted();
+        $context = $this->divisionResolver->createContext($teams);
         foreach ($teams as $team) {
-            $divisionCode = $this->divisionResolver->resolveDivision($team);
+            $divisionCode = $this->divisionResolver->resolveDivision($team, $context);
             $playingTeam = new PlayingTeam($championship, $team, $divisionCode);
             $players[] = $playingTeam;
         }

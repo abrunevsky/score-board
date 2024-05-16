@@ -8,5 +8,12 @@ use App\Entity\Team;
 
 interface TeamDivisionResolver
 {
-    public function resolveDivision(Team $team): string;
+    /**
+     * @param Team[] $teams
+     *
+     * @return object
+     */
+    public function createContext(array $teams): object;
+
+    public function resolveDivision(Team $team, object $context): string;
 }

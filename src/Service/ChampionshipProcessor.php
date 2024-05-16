@@ -34,7 +34,19 @@ class ChampionshipProcessor
         }
     }
 
-    public function processAllSteps(Championship $championship): void
+    public function processSeries(Championship $championship): void
+    {
+        foreach ($this->handlers as $handler) {
+            if ($handler->canProcess($championship)) {
+                while ($handler->canProcess($championship)) {
+                    $handler->process($championship);
+                }
+                break;
+            }
+        }
+    }
+
+    public function processAll(Championship $championship): void
     {
         foreach ($this->handlers as $handler) {
             while ($handler->canProcess($championship)) {

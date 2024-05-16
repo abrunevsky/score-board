@@ -89,3 +89,7 @@ table td {
 .play-off th {
     width: 25%;
 }
+
+.btn-large {
+    font-size: 120%;
+}

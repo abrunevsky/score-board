@@ -115,13 +115,14 @@
 			</div>
 		</div>
 		<hr />
-		<div class="control hidden">
+		<form class="control hidden" onsubmit="return false">
 			<h4>Championship control:</h4>
-			<button type="button" class="create-btn" data-bidirectional="0">Create New</button>
-			<button type="button" class="create-btn" data-bidirectional="1">Create New (host + guest)</button>
-			<button type="button" class="iterate-btn" data-finalize="0">Apply Iteration Step</button>
-			<button type="button" class="iterate-btn" data-finalize="1">Apply All Steps</button>
-		</div>
+			<button type="button" class="create-btn" data-bidirectional="0">Create New (1 game)</button>
+			<button type="button" class="create-btn" data-bidirectional="1">Create New (2 games: host + guest)</button>
+			<button type="submit" class="iterate-btn btn-large" data-finalize="0">Execute 1 Step</button>
+			<button type="button" class="iterate-btn" data-finalize="1">Execute Series</button>
+			<button type="button" class="iterate-btn" data-finalize="100">Execute All</button>
+		</form>
 	</div>
 	<script type="module" src="assets/main.js"></script>
 </body>

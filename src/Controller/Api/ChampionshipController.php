@@ -82,10 +82,15 @@ class ChampionshipController extends AbstractController
             throw new ConflictHttpException('Current championship does not exist or it is over.');
         }
 
-        if ($request->request->get('finalize', false)) {
-            $this->championshipProcessor->processAllSTeps($championship);
-        } else {
-            $this->championshipProcessor->processStep($championship);
+        switch ($request->request->get('finalize', 0)) {
+            case 1:
+                $this->championshipProcessor->processSeries($championship);
+                break;
+            case 100:
+                $this->championshipProcessor->processAll($championship);
+                break;
+            default:
+                $this->championshipProcessor->processStep($championship);
         }
 
         return new JsonResponse([

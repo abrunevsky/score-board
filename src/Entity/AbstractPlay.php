@@ -26,7 +26,7 @@ abstract class AbstractPlay
     protected \DateTimeImmutable $playAt;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('pending', 'completed')")
+     * @ORM\Column(type="string", columnDefinition="ENUM('pending', 'completed') NOT NULL")
      */
     protected string $status = self::STATUS_PENDING;
 

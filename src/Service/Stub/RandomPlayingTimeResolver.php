@@ -9,12 +9,12 @@ use App\Service\PlayingTimeResolver;
 
 class RandomPlayingTimeResolver implements PlayingTimeResolver
 {
-    public function resolvePlayingTime(Team $team): \DateTimeImmutable
+    public function resolvePlayingTime(Team $team1, Team $team2): \DateTimeImmutable
     {
         return (new \DateTimeImmutable())->modify(
             sprintf(
                 '+ %d days',
-                \random_int(1, $team->getId() + strlen($team->getName()))
+                \random_int(1, \abs($team1->getId() - $team2->getId()) + 1)
             )
         );
     }

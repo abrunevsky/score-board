@@ -33,15 +33,14 @@ class ChampionshipFactory
     {
         return $this->entityManager->wrapInTransaction(function () use ($bidirectional) {
             $championship = new Championship($bidirectional);
-            $this->entityManager->persist($championship);
 
             $players = $this->prepareTeams($championship);
             $championship->setPlayingTeams($players);
 
             $plays = $this->preparePlays($championship, $players);
             $championship->setPlays($plays);
-            $championship->setStatus(Championship::STATUS_PLAY);
 
+            $this->entityManager->persist($championship);
             $this->entityManager->flush();
 
             return $championship;
@@ -94,7 +93,10 @@ class ChampionshipFactory
                     $championship,
                     $player1->getTeam(),
                     $player2->getTeam(),
-                    $this->playingTimeResolver->resolvePlayingTime($player1->getTeam())
+                    $this->playingTimeResolver->resolvePlayingTime(
+                        $player1->getTeam(),
+                        $player2->getTeam()
+                    )
                 );
 
                 if ($championship->isBidirectional()) {
@@ -102,7 +104,10 @@ class ChampionshipFactory
                         $championship,
                         $player2->getTeam(),
                         $player1->getTeam(),
-                        $this->playingTimeResolver->resolvePlayingTime($player2->getTeam())
+                        $this->playingTimeResolver->resolvePlayingTime(
+                            $player2->getTeam(),
+                            $player1->getTeam(),
+                        )
                     );
                 }
             }

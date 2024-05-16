@@ -8,5 +8,5 @@ use App\Entity\Team;
 
 interface PlayingTimeResolver
 {
-    public function resolvePlayingTime(Team $team): \DateTimeImmutable;
+    public function resolvePlayingTime(Team $team1, Team $team2): \DateTimeImmutable;
 }

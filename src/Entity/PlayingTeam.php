@@ -35,7 +35,7 @@ final class PlayingTeam
     private Team $team;
 
     /**
-     * @ORM\Column(type="string", length=1, columnDefinition="CHAR(1)")
+     * @ORM\Column(type="string", length=1, columnDefinition="CHAR(1) NOT NULL")
      */
     private string $division;
 

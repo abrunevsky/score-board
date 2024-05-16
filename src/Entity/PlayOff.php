@@ -50,7 +50,7 @@ final class PlayOff extends AbstractPlay
     private int $team2Score = 0;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('1/4final', '1/2final', 'final', '3place')")
+     * @ORM\Column(type="string", columnDefinition="ENUM('1/4final', '1/2final', 'final', '3place') NOT NULL")
      */
     private string $stage;
 

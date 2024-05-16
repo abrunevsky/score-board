@@ -19,7 +19,7 @@ $(() => {
         '.empty-board': [undefined],
         '.create-btn': ['error', 'finished'],
         '.iterate-btn': (status) => ['error', 'finished'].indexOf(status) === -1,
-        '.play-off': ['qualifying', 'finished'],
+        '.play-off': ['qualifying', 'playoff_quarter', 'playoff_semifinal', 'playoff_final', 'playoff_3d_place', 'finished'],
     };
 
     const toggleVisibility = (championship) => {

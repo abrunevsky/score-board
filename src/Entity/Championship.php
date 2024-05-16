@@ -17,8 +17,12 @@ final class Championship
     public const STATUS_DRAW = 'draw';
     public const STATUS_PLAY = 'play';
     public const STATUS_QUALIFYING = 'qualifying';
-    public const STATUS_PLAYOFF = 'playoff';
+    public const STATUS_PLAYOFF_QUARTER = 'playoff_quarter';
+    public const STATUS_PLAYOFF_SEMIFINAL = 'playoff_semifinal';
+    public const STATUS_PLAYOFF_FINAL = 'playoff_final';
+    public const STATUS_PLAYOFF_3RD_PLACE = 'playoff_3d_place';
     public const STATUS_FINISHED = 'finished';
+    public const STATUS_ERROR = 'error';
 
     /**
      * @ORM\Id
@@ -35,7 +39,10 @@ final class Championship
     private \DateTimeImmutable $createdAt;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('draw', 'play', 'qualifying', 'playoff', 'finished')")
+     * @ORM\Column(
+     *     type="string",
+     *     columnDefinition="ENUM('draw', 'play', 'qualifying', 'playoff_quarter', 'playoff_semifinal', 'playoff_final', 'playoff_3d_place', 'finished', 'error') NOT NULL"
+     * )
      */
     private string $status = self::STATUS_DRAW;
 
@@ -64,6 +71,11 @@ final class Championship
      * @ORM\Column(type="boolean")
      */
     private bool $bidirectional;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $errorMessage = null;
 
     public function __construct(bool $bidirectional)
     {
@@ -137,14 +149,27 @@ final class Championship
     /**
      * @param array<int, PlayOff> $playOffs
      */
-    public function setPlayOffs(array $playOffs): void
+    public function appendPlayOffs(array $playOffs): void
     {
-        $this->playOffs = new ArrayCollection($playOffs);
+        foreach ($playOffs as $playOff) {
+            $this->playOffs->add($playOff);
+        }
     }
 
     public function isBidirectional(): bool
     {
         return $this->bidirectional;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    public function setErrorMessage(string $errorMessage): void
+    {
+        $this->errorMessage = $errorMessage;
+        $this->status = self::STATUS_ERROR;
     }
 
     public function findPlayingTeamByTeam(Team $team): ?PlayingTeam

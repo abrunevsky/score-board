@@ -18,7 +18,7 @@ class RandomDivisionResolver implements TeamDivisionResolver
     /**
      * @param string[] $divisionNames
      */
-    public function __construct(array $divisionNames = ['A', 'B'], int $playOffPlayers = 8)
+    public function __construct(array $divisionNames = ['A', 'B'], int $playOffPlayers = 4)
     {
         $this->divisionNames = $divisionNames;
         $this->playOffPlayers = $playOffPlayers;

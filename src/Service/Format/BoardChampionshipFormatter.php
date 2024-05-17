@@ -40,6 +40,7 @@ class BoardChampionshipFormatter
             'status' => $championship->getStatus(),
             'divisions' => $this->formatDivisions($championship, $teamsDictionary),
             'playoff' => $this->formatPlayOff($championship->getPlayOffs(), $teamsDictionary, $divisionDictionary),
+            'rateList' => $this->createRateList($championship, $teamsDictionary),
         ];
     }
 
@@ -121,8 +122,22 @@ class BoardChampionshipFormatter
         return $formattedMap;
     }
 
-    private static function getPlayOffTeamName(Team $team, array $teamsDictionary, array $divisionsDictionary): string
+    /**
+     * @param Championship $championship
+     * @param array<int, string> $teamsDictionary
+     *
+     * @return string[]
+     */
+    private function createRateList(Championship $championship, array $teamsDictionary): array
     {
-        return sprintf('%s /%s/', $teamsDictionary[$team->getId()], $divisionsDictionary[$team->getId()]);
+        $list = [];
+
+        if (Championship::STATUS_FINISHED === $championship->getStatus()) {
+            foreach ($championship->getSortedPlayingTeams() as $playingTeam) {
+                $list[] = $teamsDictionary[$playingTeam->getTeam()->getId()];
+            }
+        }
+
+        return $list;
     }
 }

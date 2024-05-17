@@ -39,6 +39,7 @@ class ChampionshipFactory
 
             $plays = $this->preparePlays($championship, $players);
             $championship->setPlays($plays);
+            $championship->setStatus(Championship::STATUS_PLAY);
 
             $this->entityManager->persist($championship);
             $this->entityManager->flush();

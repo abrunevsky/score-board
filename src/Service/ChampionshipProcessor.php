@@ -41,7 +41,8 @@ class ChampionshipProcessor
                 while ($handler->canProcess($championship)) {
                     $handler->process($championship);
                 }
-                break;
+
+                return;
             }
         }
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\AbstractPlay;
 use App\Entity\Championship;
 use App\Entity\Play;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -37,7 +38,7 @@ class PlayRepository extends ServiceEntityRepository
                 ->where('p.championship = :championship')
                 ->andWhere('p.status = :pendingStatus')
                 ->setParameter('championship', $championship)
-                ->setParameter('pendingStatus', Play::STATUS_PENDING)
+                ->setParameter('pendingStatus', AbstractPlay::STATUS_PENDING)
                 ->orderBy('p.playAt', 'ASC')
                 ->setMaxResults(2)
                 ->getQuery()

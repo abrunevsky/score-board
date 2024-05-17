@@ -6,11 +6,22 @@ namespace App\Service\ProgressHandler;
 
 use App\Entity\Championship;
 use App\Entity\PlayOff;
+use App\Service\PlayingTimeResolver;
+use Doctrine\ORM\EntityManagerInterface;
 
-class PlayOfQualifyingHandler extends AbstractPlayOfHandler
+class PlayOfQualifyingHandler implements ChampionshipHandlerInterface
 {
     private const TEAMS_DIVISIONS_QTY = 2;
     private const PLAYOFF_TEAMS_QTY = 4;
+
+    private EntityManagerInterface $entityManager;
+    private PlayingTimeResolver $timeResolver;
+
+    public function __construct(EntityManagerInterface $entityManager, PlayingTimeResolver $timeResolver)
+    {
+        $this->entityManager = $entityManager;
+        $this->timeResolver = $timeResolver;
+    }
 
     public function canProcess(Championship $championship): bool
     {
@@ -20,13 +31,12 @@ class PlayOfQualifyingHandler extends AbstractPlayOfHandler
     public function process(Championship $championship): void
     {
         $this->entityManager->wrapInTransaction(function () use ($championship) {
-            $nextPlays = $this->prepareQuarterPlays($championship);
-            $championship->appendPlayOffs($nextPlays);
+            $this->prepareQuarterPlays($championship);
             $championship->setStatus(Championship::STATUS_PLAYOFF_QUARTER);
         });
     }
 
-    private function prepareQuarterPlays(Championship $championship): ?array
+    private function prepareQuarterPlays(Championship $championship): void
     {
         $playOffPlayers = [];
         $winnersByDivision = [];
@@ -78,7 +88,7 @@ class PlayOfQualifyingHandler extends AbstractPlayOfHandler
             }
         }
 
-        return $playOffPlayers;
+        $championship->appendPlayOffs($playOffPlayers);
     }
 
     public static function getIndex(): int

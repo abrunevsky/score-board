@@ -197,4 +197,9 @@ final class Championship
 
         return $playingTeams;
     }
+
+    public function isCompleted(): bool
+    {
+        return in_array($this->status, [self::STATUS_FINISHED, self::STATUS_ERROR]);
+    }
 }

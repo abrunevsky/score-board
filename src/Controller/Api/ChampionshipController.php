@@ -53,11 +53,8 @@ class ChampionshipController extends AbstractController
         $championship = $this->championshipRepository->findCurrent();
         $bidirectional = (bool) $request->request->get('bidirectional', false);
 
-        if (
-            $championship instanceof Championship
-            && Championship::STATUS_FINISHED !== $championship->getStatus()
-        ) {
-            throw new ConflictHttpException('Current championship already exists and it has not been over yet.');
+        if ($championship instanceof Championship && !$championship->isCompleted()) {
+            throw new ConflictHttpException('Current championship already exists and it has not been completed yet.');
         }
 
         $championship = $this->championshipFactory->create($bidirectional);
@@ -75,11 +72,8 @@ class ChampionshipController extends AbstractController
     {
         $championship = $this->championshipRepository->findCurrent();
 
-        if (
-            null === $championship
-            || Championship::STATUS_FINISHED === $championship->getStatus()
-        ) {
-            throw new ConflictHttpException('Current championship does not exist or it is over.');
+        if (null === $championship || $championship->isCompleted()) {
+            throw new ConflictHttpException('Current championship does not exist or it is completed.');
         }
 
         switch ($request->request->get('finalize', 0)) {

@@ -20,6 +20,7 @@ $(() => {
         '.create-btn': ['error', 'finished'],
         '.iterate-btn': (status) => ['error', 'finished'].indexOf(status) === -1,
         '.play-off': ['qualifying', 'playoff_quarter', 'playoff_semifinal', 'playoff_final', 'playoff_3d_place', 'finished'],
+        '.rate-list': ['finished'],
     };
 
     const toggleVisibility = (championship) => {
@@ -57,7 +58,7 @@ $(() => {
         $('.loading').show();
         return $.getJSON(BOARD_API_ENDPOINT).then((data) => {
             $('.loading').hide();
-            setCurrent(data);
+            setCurrentBoard(data);
         });
     };
 
@@ -103,10 +104,23 @@ $(() => {
         return table;
     };
 
-    const setCurrent = (data) => {
+    const createRateList = (teamNames) => {
+        const table = $('<table><tbody></tbody></table>');
+        teamNames.forEach((teamName, index) => {
+            table.append(
+                `<tr>
+                  <td>${index+1}.</td>
+                  <td>${teamName}.</td>
+                </tr>`
+            );
+        });
+        $('.rate-list').html('').append(table);
+    };
+
+    const setCurrentBoard = (data) => {
         current = data;
         const { championship } = data;
-        const { divisions, playoff } = championship;
+        const { divisions, playoff, rateList } = championship;
 
         toggleVisibility(championship);
 
@@ -128,6 +142,10 @@ $(() => {
                 }
             });
         });
+
+        if (championship.status === 'finished') {
+            createRateList(rateList);
+        }
     }
 
     $('.create-btn').on('click', ({ target }) => {

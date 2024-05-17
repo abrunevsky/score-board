@@ -95,3 +95,45 @@ table td {
 .btn-large {
     font-size: 120%;
 }
+.create-btn {
+    font-size: 120%;
+    padding: 0.5rem;
+    color: navy;
+}
+
+.rate-list {
+    position: relative;
+}
+
+.rate-list table {
+    position: absolute;
+}
+
+.rate-list table td {
+    background-color: whitesmoke;
+}
+
+.first-place {
+    color: #AA6C39;
+}
+
+.second-place {
+    color: #71706E;
+}
+
+.third-place {
+    color: #804A00;
+}
+
+.final-game {
+    font-weight: bold;
+}
+
+.play-off .score {
+    font-size: 120%;
+    padding: 0 12px;
+}
+
+.rate-list-cell {
+    vertical-align: top;
+}

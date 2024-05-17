@@ -10,8 +10,6 @@ interface TeamDivisionResolver
 {
     /**
      * @param Team[] $teams
-     *
-     * @return object
      */
     public function createContext(array $teams): object;
 

@@ -51,8 +51,6 @@ abstract class AbstractPlayOfHandler implements ChampionshipHandlerInterface
     }
 
     /**
-     * @param Championship $championship
-     *
      * @return PlayOff[]
      */
     protected function getCurrentPlays(Championship $championship, int $expectedPlaysQty): array

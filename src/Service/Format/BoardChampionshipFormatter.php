@@ -123,7 +123,6 @@ class BoardChampionshipFormatter
     }
 
     /**
-     * @param Championship $championship
      * @param array<int, string> $teamsDictionary
      *
      * @return string[]

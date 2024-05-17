@@ -26,8 +26,6 @@ class RandomDivisionResolver implements TeamDivisionResolver
 
     /**
      * @param Team[] $teams
-     *
-     * @return object{ pool: string[] }
      */
     public function createContext(array $teams): object
     {
@@ -52,9 +50,6 @@ class RandomDivisionResolver implements TeamDivisionResolver
         return (object) compact('pool');
     }
 
-    /**
-     * @param object{ pool: string[] } $context
-     */
     public function resolveDivision(Team $team, object $context): string
     {
         if (empty($context->pool)) {

@@ -22,6 +22,9 @@ class RandomDivisionResolverTest extends TestCase
         ]);
     }
 
+    /**
+     * @return iterable<string, array{ 0: string[], 1: Team[], 2: string[] }>
+     */
     public function createContextProvider(): iterable
     {
         yield '4 teams' => [
@@ -48,6 +51,10 @@ class RandomDivisionResolverTest extends TestCase
     }
 
     /**
+     * @param string[] $divisions
+     * @param Team[]   $teams
+     * @param string[] $expectedSortedPool
+     *
      * @dataProvider createContextProvider
      */
     public function testCreateContextWithSuccess(array $divisions, array $teams, array $expectedSortedPool): void

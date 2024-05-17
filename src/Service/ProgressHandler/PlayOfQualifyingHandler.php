@@ -72,7 +72,6 @@ class PlayOfQualifyingHandler implements ChampionshipHandlerInterface
                 );
             }
 
-
             [$divisionA, $divisionB] = array_values($winnersByDivision);
 
             foreach ($divisionA as $k => $team1) {
